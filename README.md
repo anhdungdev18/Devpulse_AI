@@ -10,7 +10,7 @@ DevPulseAI là một project mẫu minh họa cách xây dựng **pipeline multi
 
 Demo trực tiếp:
 
-- Frontend: \url{https://devpulse-ai-omega.vercel.app/}
+https://devpulse-ai-omega.vercel.app/
 
 Nguyên tắc thiết kế của project này:
 
