@@ -8,6 +8,10 @@ DevPulseAI là một project mẫu minh họa cách xây dựng **pipeline multi
 - đánh giá rủi ro
 - tổng hợp thành một bản **intelligence digest** có thể hành động
 
+Demo trực tiếp:
+
+- Frontend: \url{https://devpulse-ai-omega.vercel.app/}
+
 Nguyên tắc thiết kế của project này:
 
 - chỉ dùng agent ở những bước thực sự cần suy luận
@@ -221,6 +225,10 @@ https://your-render-url/api/health
 ```
 
 ### Frontend trên Vercel
+
+Demo frontend hiện tại:
+
+- \url{https://devpulse-ai-omega.vercel.app/}
 
 Trước khi deploy, sửa:
 
