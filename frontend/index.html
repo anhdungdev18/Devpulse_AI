@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevPulseAI Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="header">
+        <div>
+          <div class="eyebrow">DevPulseAI</div>
+          <h1>Bảng Điều Khiển Tình Báo AI</h1>
+          <p>Bảng điều khiển tình báo tín hiệu đa tác tử</p>
+        </div>
+        <div class="header-actions">
+          <button id="runButton" class="btn btn-primary">Chạy Pipeline</button>
+          <button id="refreshButton" class="btn btn-secondary">Làm Mới Dữ Liệu</button>
+          <button id="exportButton" class="btn btn-secondary">Xuất Bản Tóm Tắt</button>
+        </div>
+      </header>
+
+      <section class="controls">
+        <div class="control search-wrap">
+          <label for="searchInput">Tìm kiếm</label>
+          <input id="searchInput" type="search" placeholder="Tìm theo tiêu đề, mô tả, nguồn..." />
+        </div>
+        <div class="control">
+          <label for="sourceFilter">Nguồn</label>
+          <select id="sourceFilter">
+            <option value="all">Tất cả nguồn</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="riskFilter">Rủi ro</label>
+          <select id="riskFilter">
+            <option value="all">Tất cả mức</option>
+            <option value="LOW">LOW</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HIGH">HIGH</option>
+            <option value="CRITICAL">CRITICAL</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="relevanceFilter">Ngưỡng liên quan tối thiểu</label>
+          <input id="relevanceFilter" type="range" min="0" max="100" value="0" />
+          <span id="relevanceValue">0+</span>
+        </div>
+        <div class="control">
+          <label for="signalCount">Số tín hiệu / nguồn</label>
+          <select id="signalCount"></select>
+        </div>
+      </section>
+
+      <section id="overviewCards" class="overview-grid"></section>
+
+      <section class="panel">
+        <div class="section-title">Trạng Thái Pipeline</div>
+        <div id="pipelineStatus" class="pipeline-status"></div>
+        <div class="progress-wrap">
+          <div class="progress-head">
+            <strong id="progressPercent">0%</strong>
+            <span id="progressMessage">Đang chờ chạy pipeline.</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <div id="progressDetail" class="progress-detail">Chưa có hoạt động nào.</div>
+        </div>
+        <div class="progress-log-block">
+          <div class="section-subtitle">Nhật ký tiến trình</div>
+          <div id="progressLog" class="progress-log"></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="left-column">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="section-title">Bảng Tín Hiệu</div>
+                <p class="section-subtitle">Tín hiệu đã thu thập với chấm điểm deterministic kết hợp tác tử.</p>
+              </div>
+              <div id="tableMeta" class="table-meta"></div>
+            </div>
+            <div class="table-wrap">
+              <table class="signals-table">
+                <thead>
+                  <tr>
+                    <th>Tiêu đề</th>
+                    <th>Nguồn</th>
+                    <th>Liên quan</th>
+                    <th>Rủi ro</th>
+                    <th>Thẻ</th>
+                    <th>Ngày</th>
+                  </tr>
+                </thead>
+                <tbody id="signalsTableBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel digest-panel">
+            <div class="section-title">Bản Tóm Tắt Tình Báo</div>
+            <div id="digestSummary" class="digest-summary">Chưa có dữ liệu.</div>
+            <div class="digest-block">
+              <h3>Tín hiệu nổi bật</h3>
+              <div id="topSignalsList" class="digest-list"></div>
+            </div>
+            <div class="digest-block">
+              <h3>Rủi ro cần theo dõi</h3>
+              <div id="risksList" class="digest-list"></div>
+            </div>
+            <div class="digest-block">
+              <h3>Hành động đề xuất</h3>
+              <div id="actionsList" class="digest-list"></div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="right-column">
+          <section class="panel detail-panel">
+            <div class="section-title">Bảng Chi Tiết Tín Hiệu</div>
+            <div id="detailEmpty" class="detail-empty">Chọn một signal trong bảng để xem phân tích chi tiết.</div>
+            <div id="detailContent" class="detail-content hidden">
+              <div class="detail-top">
+                <div>
+                  <div id="detailSource" class="source-badge"></div>
+                  <h2 id="detailTitle"></h2>
+                </div>
+                <a id="detailUrl" class="btn btn-secondary small" target="_blank" rel="noreferrer">Mở liên kết gốc</a>
+              </div>
+
+              <div class="detail-section">
+                <h3>Mô tả</h3>
+                <p id="detailDescription"></p>
+              </div>
+
+              <div class="detail-section">
+                <h3>Điểm số</h3>
+                <div class="score-grid">
+                  <div class="score-card">
+                    <span>Liên quan</span>
+                    <strong id="detailRelevance"></strong>
+                  </div>
+                  <div class="score-card">
+                    <span>Rủi ro</span>
+                    <strong id="detailRisk"></strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-section">
+                <h3>Metadata</h3>
+                <div id="detailMetadata" class="metadata-grid"></div>
+              </div>
+
+              <div class="detail-section">
+                <h3>Giải thích điểm liên quan</h3>
+                <p id="detailRelevanceReason"></p>
+              </div>
+
+              <div class="detail-section">
+                <h3>Giải thích rủi ro</h3>
+                <div id="detailRiskReason" class="detail-list"></div>
+              </div>
+
+              <div class="detail-section">
+                <h3>Hành động đề xuất</h3>
+                <p id="detailAction"></p>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </div>
+
+    <template id="overviewCardTemplate">
+      <article class="overview-card">
+        <div class="overview-label"></div>
+        <div class="overview-value"></div>
+        <div class="overview-note"></div>
+      </article>
+    </template>
+
+    <script src="./config.js"></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

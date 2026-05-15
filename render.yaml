@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: devpulseai-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MODEL_RELEVANCE
+        value: gpt-4.1-mini
+      - key: MODEL_RISK
+        value: gpt-4.1-mini
+      - key: MODEL_SYNTHESIS
+        value: gpt-4.1

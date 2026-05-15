@@ -1,0 +1,7 @@
+agno
+openai
+httpx
+feedparser
+python-dotenv
+fastapi
+uvicorn[standard]

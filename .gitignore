@@ -1,0 +1,13 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment and local config
+.env
+backend/.env
+.venv/
+venv/
+
+# Local runtime artifacts
+*.log
